@@ -15,10 +15,32 @@
 *
 * */
 const View = {
-  init: () => {
+  init: async () => {
     const tbodyElem = document.getElementById('shopping-cart-tbl').querySelector('tbody');
-
-    console.log('TODO: Please see the above requirement');
+    const cartR = await fetch('http://localhost:4002/cart');
+    const cartD = await cartR.json();
+    //console.log(cartD);
+    //debugger;
+    const productsR = await fetch('http://localhost:4002/products');
+    const productsD = await productsR.json();
+    // console.log(productsD); 
+    const productMapping = new Map(productsD.map(product => [product.id, product.name]));
+  console.log(productMapping);
+  cartD.forEach(productId => {
+     // console.log(productId);
+      const productName = productMapping.get(productId.id);
+            //console.log(productName);
+      const row = tbodyElem.insertRow();
+     // debugger;
+      const c1 = row.insertCell(0);
+      const c2 = row.insertCell(1);
+      c1.textContent = productId.id;
+      c2.textContent = productName;
+    });
   }
 };
+
 document.addEventListener('DOMContentLoaded', View.init);
+
+
+

@@ -21,7 +21,38 @@
 const NumericInput = {
   init: () => {
     document.querySelectorAll('.c-numeric-input').forEach(elem => {
-      console.log('TODO: Please see the above requirement for numeric input');
+      elem.addEventListener("blur", function() {
+        let value = this.value.trim();
+        if (value === '' || isNaN(value)) {
+          this.classList.add("c-numeric-input--error");
+          this.insertAdjacentHTML("afterend", '<span class="c-numeric-input__error-msg">invalid input</span>');
+        } else
+         {
+          this.classList.remove("c-numeric-input--error");
+          this.classList.add("c-numeric-input--valid");
+          this.nextElementSibling.innerHTML = "";
+          if(value.startsWith(".")) {
+            this.value = "0" + value;
+          } else if (value.startsWith("0") && !value.includes("."))
+           {
+            this.value = parseInt(value, 10);
+           }
+          }
+      });
+
+      elem.addEventListener("focus", function() {
+        this.classList.remove('c-numeric-input--valid');
+        this.classList.remove("c-numeric-input--error");
+        this.nextElementSibling.textContent = "";
+      });
+
+      elem.addEventListener("input", function() {
+        if (this.classList.contains("c-numeric-input--error")) 
+        {
+          this.classList.remove("c-numeric-input--error");
+          this.nextElementSibling.textContent = "";
+        }
+      });
     });
   }
 };
